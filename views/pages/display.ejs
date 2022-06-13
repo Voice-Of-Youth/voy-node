@@ -1,0 +1,70 @@
+
+<%- include('../partials/header', {title:'Show Record'}); -%>
+<%- include('../partials/navigation'); -%>
+
+<div class="container">        
+     <div class="card">
+        <div class="card-header bg-primary text-white">
+			<h2>CRUD RESTful API using Node.js (Express.js) and MySQL Database</h2>
+        </div>
+				
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <tr>
+                        <th>Course Code</th>
+                        <th>Course Title</th>
+                        <th>Description</th>
+                        <th>Category</th>
+                        <th>Certificate</th>
+						<th> Duration (in Months)</th>
+						<th> Cost (in ETB)</th>
+						<th> Action </th>
+                    </tr>
+					
+					<% if(data.length > 0){
+                        data.forEach(function(data){
+                    %>
+					<tr>
+                        <td><%= data.code %></td>
+                        <td><%= data.title %></td>
+                        <td><%= data.description %></td>
+                        <td><%= data.category %></td>
+						<td><%= data.certificate %></td>
+						<td><%= data.duration %></td>
+						<td><%= data.cost %></td>
+                        <td>
+                            <a href="./edit/<%= id = data.code%>" class="btn btn-primary btn-sm">Edit</a>
+                            <a href="./delete/<%= data.code%>" class="btn btn-danger btn-sm">Delete</a>
+                        </td>
+                    </tr>
+				    <%
+                        });
+                    }
+	                else{
+                    %>
+                    <tr>
+                        <td colspan="5">No Data Found</td>
+                    </tr>
+                    <% } %>
+                </table>
+				
+				<% 
+				if(typeof msg != 'undefined' && msg != "")
+				{ 
+				%>
+					<div class="col-12">
+						<div class="success-msg">
+							<%= msg %>
+						</div>									
+					</div>
+				<% 
+					}	
+				%>				
+            </div>
+        </div>
+   </div>
+</div> 
+			
+<%- include('../partials/footer'); -%>
+      
