@@ -11,7 +11,24 @@
 				
             <span class="navbar-toggler-icon"></span>
         </button>
-		
+		<% 
+			if (title == 'Homepage')
+			{
+		%>	
+			<div class="row">
+				<div style = "margin-left: 120px;">
+					<form action="" method="POST">
+						<input type="text" name="search_Key" style = "width: 350px;" 
+							id="search-Key" Placeholder="Enter search key">
+								
+						<input type="submit" value="Search"
+							style="display: inline-block; width: 100px; padding: 5px 10px;  
+								background-color: brown;	text-align: center;">
+					</form>
+				</div>
+			</div>
+		<%} %>
+	
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ml-auto">
         

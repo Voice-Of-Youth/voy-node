@@ -19,6 +19,7 @@ const {isLoggedin, isNotLoggedin} = require('../lib/check_authentication');
 const validator = require('../lib/validation_rules');
 
 router.get('/', isLoggedin, homePage);
+router.post('/', isLoggedin, homePage);
 
 router.get("/auth/login", isNotLoggedin, loginPage);
 router.post("/auth/login", isNotLoggedin, validator.validationRules[0], login);
