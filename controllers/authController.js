@@ -10,7 +10,23 @@ const dbConn = require("../config/db_Connection")
 
 // Home Page
 exports.homePage = (req, res, next) => {
-	var query1 = 'SELECT * FROM `courses`';
+	var query1;
+	if (req.method == 'GET')
+		query1 = 'SELECT * FROM `courses`';
+
+	if (req.method == 'POST')
+	{
+		const { body } = req;
+		//fulltext search 
+		query1 = `SELECT * FROM courses WHERE MATCH (code, title, description)` +
+						` AGAINST ("${body.search_Key}" IN NATURAL LANGUAGE MODE)`;
+		
+		//Alternative: search multiple columns with "concat & like" operators 
+		/*
+		* `SELECT * FROM courses WHERE concat (code, title, description)` +
+		*		` like "%${body.search_Key}%"`;		
+		*/
+	}
     dbConn.query(query1, async (error, result)=>{
 		
 		if(error)
@@ -18,7 +34,7 @@ exports.homePage = (req, res, next) => {
 			console.log (error);
 			throw error;
 		}
-	res.render('home', {data:result});
+	res.render('home', {data : result, title:'Homepage'});
 	});
 }
 
