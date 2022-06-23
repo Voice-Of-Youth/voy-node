@@ -10,3 +10,4 @@
 #### => Search records by ID, Title and also fulltest search
 #### => Import and export records
 #### => Image upload (course picture/icon)
+#### => Validation
