@@ -12,14 +12,28 @@ const dbConn = require("../config/db_Connection")
 exports.homePage = (req, res, next) => {
 	var query1;
 	if (req.method == 'GET')
-		query1 = 'SELECT * FROM `courses`';
+	{
+		if (req.session.level == 1)
+			query1 = 'SELECT * FROM `courses`';
+		else 
+			query1 = `SELECT * FROM courses as CO LEFT JOIN users as US ` + 
+						`ON CO.user_id = US.id WHERE US.id = "${req.session.userID}"`;
+	}
 
-	if (req.method == 'POST')
+	else if (req.method == 'POST')
 	{
 		const { body } = req;
 		//fulltext search 
-		query1 = `SELECT * FROM courses WHERE MATCH (code, title, description)` +
-						` AGAINST ("${body.search_Key}" IN NATURAL LANGUAGE MODE)`;
+		if (req.session.level == 1){
+			query1 = `SELECT * FROM courses WHERE MATCH (code, title, description)` +
+							` AGAINST ("${body.search_Key}" IN NATURAL LANGUAGE MODE)`;
+		}
+		else{
+			query1 = `SELECT * FROM courses as CO LEFT JOIN users as US ON CO.user_id = US.id` + 
+							 ` WHERE US.id = "${req.session.userID}"` +
+							 ` AND MATCH (code, title, description)` +
+							` AGAINST ("${body.search_Key}" IN NATURAL LANGUAGE MODE)`;			
+		}
 		
 		//Alternative: search multiple columns with "concat & like" operators 
 		/*
@@ -126,6 +140,7 @@ exports.login = (req, res, next) => {
 				if (checkPass === true) {
 					req.session.userID = row[0].id;
 					req.session.email = row[0].email;
+					req.session.level = row[0].level;
 					return res.redirect('/');
 				}
 

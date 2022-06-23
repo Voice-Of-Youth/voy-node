@@ -37,6 +37,7 @@ app.use(session({
 * View default - is the directory where the template files are located 	
 */
 const path = require('path');
+global.rootPath = __dirname;  //defining a global variable
 
 app.set('views', path.join(__dirname, 'views')); //setup View default
 app.set('view engine', 'ejs');	//define the template engine to use.

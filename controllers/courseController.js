@@ -5,30 +5,52 @@ const { validationResult } = require("express-validator");
 
 const dbConn = require("../config/db_Connection")
 const validator = require('../lib/validation_rules');
-const UploadFile = require('../lib/image_upload');
+const { uploadImage, uploadCSVFile } = require('../lib/fileUpload');
 
 // Record Display Page
 exports.recordDisplayPage = (req, res, next) => {
 	
 	var query1;
-	if (req.method == 'GET')
-		query1 = 'SELECT * FROM `courses`';
-
-	if (req.method == 'POST')
+	if (req.method == 'GET'){
+		if (req.session.level == 1)
+			query1 = 'SELECT * FROM `courses`';
+		else 
+			query1 = `SELECT * FROM courses as CO LEFT JOIN users as US ` + 
+						`ON CO.user_id = US.id WHERE US.id = "${req.session.userID}"`;
+	}					
+	else if (req.method == 'POST')
 	{
 		const { body } = req;
 		if (typeof body.searchBy === 'undefined')
 		{
 			if(!body.search_Key)
 			{
-				query1 = 'SELECT * FROM `courses`';
-				req.flash ('success', "Please provide a search key!")
+				if (req.session.level == 1)
+				{
+					query1 = 'SELECT * FROM `courses`';
+					req.flash ('success', "Please provide a search key!")
+				}
+				else
+				{
+					query1 = `SELECT * FROM courses as CO LEFT JOIN users as US ` + 
+								`ON CO.user_id = US.id WHERE US.id = "${req.session.userID}"`;					
+					req.flash ('success', "Please provide a search key!")
+				}
 			}
 			else{
 				//search multiple columns with "concat & like" operators
-				query1 = `SELECT * FROM courses WHERE `
-							+ `concat (code, title, description, category, certificate)`
-							+ ` like "%${body.search_Key}%"`;
+				if (req.session.level == 1)
+				{
+					query1 = `SELECT * FROM courses WHERE `
+								+ `concat (code, title, description, category, certificate)`
+								+ ` like "%${body.search_Key}%"`;
+				}
+				else{
+					query1 = `SELECT * FROM courses as CO LEFT JOIN users as US ON CO.user_id = US.id` + 
+									` WHERE US.id = "${req.session.userID}"` +
+									` AND MATCH (code, title, description)` +
+									` AGAINST ("${body.search_Key}" IN NATURAL LANGUAGE MODE)`;					
+				}
 				
 				//fulltext search 
 				/*
@@ -37,11 +59,27 @@ exports.recordDisplayPage = (req, res, next) => {
 				*/
 			}
 		}
-		else if (body.searchBy == "course_code")
-			query1 = `SELECT * FROM courses WHERE code = "${body.search_Key}"`;
-		
-		else if (body.searchBy == "course_title")
-			query1 = `SELECT * FROM courses WHERE title = "${body.search_Key}"`;
+		else if (req.session.level == 1)
+		{
+			if (body.searchBy == "course_code")
+				query1 = `SELECT * FROM courses WHERE code = "${body.search_Key}"`;
+			else if (body.searchBy == "course_title")
+				query1 = `SELECT * FROM courses WHERE title = "${body.search_Key}"`;
+		}
+		else
+		{			
+			if (body.searchBy == "course_code"){
+				query1 = `SELECT * FROM courses as CO LEFT JOIN users as US `
+								+ `ON CO.user_id = US.id WHERE CO.code = "${body.search_Key}"` 
+								+ ` AND US.id = "${req.session.userID}"`;
+			}
+								
+			else if (body.searchBy == "course_title"){		
+				query1 = `SELECT * FROM courses as CO LEFT JOIN users as US `
+								+ `ON CO.user_id = US.id WHERE CO.title = "${body.search_Key}"` 
+								+ ` AND US.id = "${req.session.userID}"`;
+			}			
+		}
 	}
 	
 	dbConn.query(query1, (error, result)=>{
@@ -79,10 +117,18 @@ exports.addRecord = async(req, res, next) => {
 		 cat = body.course_cat
 		 cert = body.certificate
 		 duration = body.course_dur
-		 cost = body.course_cost		 
-	 
-		var query3 = "INSERT INTO `courses` (`code`, `title`, `description`, `category`, `certificate`, `duration`, `cost`, `imagePath`) VALUES(?,?,?,?,?,?,?,?)";
-		dbConn.query(query3, [code, title, desc, cat, cert, duration, cost, 'None'], 
+		 cost = body.course_cost
+		 
+		 let userId;
+		 if (req.session.level == 1)
+			 userId = 0;
+		 else
+			 userId = req.session.userID;
+		
+		var query3 = `INSERT INTO courses (code, title, description, ` +
+								 `category, certificate, duration, cost, imagePath, user_id) ` +
+								 `VALUES(?,?,?,?,?,?,?,?,?)`;
+		dbConn.query(query3, [code, title, desc, cat, cert, duration, cost, 'None', userId], 
 					(error, rows)=>{
 						if(error)
 						{
@@ -123,7 +169,13 @@ exports.recordEditPage = (req, res, next) => {
 			throw error;
 		}
 		message = req.flash('msg');
-		res.render('pages/edit', {data: result[0], msg: message, title:'Edit Record'});
+		error = req.flash('error');
+		res.render('pages/edit', {
+									data: result[0], 
+									msg: message, 
+									error: error,
+									title:'Edit Record'
+							});
 	});
 }
 
@@ -132,8 +184,12 @@ exports.editRecord = (req, res, next) =>{
 
 	const errors = validationResult(req);
 	const { body } = req;
-	
 	var id = req.params.id;
+		
+	if (!errors.isEmpty()) {
+		req.flash("error", errors.array()[0].msg)
+		return res.redirect('../edit/'+ id)
+	}	
 	
 	code = body.course_code
 	title = body.course_title
@@ -155,7 +211,6 @@ exports.editRecord = (req, res, next) =>{
 			else
 			{
 				req.flash('success', 'Record successfully Updated');
-				req.flash ('title', 'Edit Record')
 				res.redirect('../display');
 			}
 
@@ -191,7 +246,7 @@ exports.uploadImage = (req, res, next) => {
 	var code = req.params.id;  //extract course code attached to the URL
 	
 	/* Checking if course icon (image) upload success */
-	const upload = UploadFile.single('course_img')
+	const upload = uploadImage.single('course_img')
 	upload(req, res, function(err) {
 		if (req.file == undefined || err) {
 			req.flash("error", "Error: You must select an image.\r\n Only image files [JPG | JPEG | PNG] are allowed!")
@@ -203,15 +258,14 @@ exports.uploadImage = (req, res, next) => {
 		var query1 = `SELECT imagePath FROM courses WHERE code = "${code}"`;
 		var oldImagePath = "";
 		dbConn.query(query1, function(error, result){
-			if(error)
-			{
+			if(error){
 				throw error;
 			}
 			oldImagePath = result[0].imagePath;
 		});
 		
 		var imgsrc = '/images/' + req.file.filename
-		console.log(imgsrc)
+		//console.log(imgsrc)
 		
 		var query2 = `UPDATE courses SET imagePath = "${imgsrc}" WHERE code = "${code}"`;
 		dbConn.query(query2, function(error, result){

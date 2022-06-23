@@ -9,7 +9,7 @@
 				<div class="card-header bg-secondary">
 					<h3>Add New Record</h3>
 				</div>
-				
+	
 				<div class="card-body">
 					<form action="" method="POST"  class = "form-inline">
 						<div class="row">
@@ -63,7 +63,7 @@
 						</div>
 	
 						<% 
-							if(typeof msg != 'undefined')
+							if(typeof msg != 'undefined' && msg != "")
 							{ 
 							%>
 								<div class="col-12">
@@ -74,7 +74,7 @@
 							<% 
 							}
 									
-							if(typeof error !== 'undefined')
+							if(typeof error !== 'undefined' && error != "")
 							{ 
 							%>
 								<div class="col-12">
