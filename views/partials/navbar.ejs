@@ -1,0 +1,64 @@
+
+<nav class="navbar">
+    <div class="navbar-container">
+        <a href="/" class="link" id="navbar-logo">VOY</a>
+        
+        <div class="navbar-hamburger" id="mobile-bar-icon">
+            <span class="hamburger-bar"></span>
+            <span class="hamburger-bar"></span>
+            <span class="hamburger-bar"></span>
+        </div>
+        
+        <!-- <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-menu menu">
+        
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button"
+                        aria-haspopup="true" aria-expanded="false">CRUD Action</a>
+						
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="/pages/display">Show Records</a>
+                        <div role="separator" class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="/pages/add">Add Record</a>
+						<div role="separator" class="dropdown-divider"></div>
+						<a class="dropdown-item" href="/pages/importCSV">Import Records</a>
+						<div role="separator" class="dropdown-divider"></div>
+						<a class="dropdown-item" href="/pages/exportCSV">Export Records</a>
+                    </div>
+                </li>
+
+                <li class="nav-item">
+                    <a href="/logout" class="nav-link">Logout</a>
+                </li>
+      
+            </ul>
+        </div> -->
+
+        <ul class="navbar-menu menu">
+            <li class="search-menu-item">
+                <div class="navbar-link link search-styling">
+                    <div id="search" class="search-bar">
+                        <input type="text" class="search-text" placeholder="Search...">
+                        <button class="search-submit">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </button>
+                        <div class="search-dropdown" id="hits-container"></div>
+                    </div>
+                    <span id="search-placeholder">Search</span>
+                </div>
+            </li>
+
+            <% if(!isLoggedIn) { %>
+                    <li class="navbar-menu-item">
+                        <a href='/signin' class='btn-link link'>Sign In</a>
+                    </li>
+            <% } else { %> 
+                <li class="navbar-menu-item">
+                    <a href='/logout' class='btn-link link'>Logout</a>
+                </li>
+            <% } %>  
+            
+            </li>
+        </ul>
+    </div>
+</nav>

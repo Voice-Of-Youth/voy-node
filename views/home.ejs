@@ -1,40 +1,211 @@
 
 <%- include('./partials/header'); -%>
-<%- include('./partials/navigation'); -%>
-		
-    <div id="container">			
-      <div class="box">
-        <h2>Courses Overview </h2>
-        <div class="cards-custom">
-		<% 
-		if(data.length > 0){
-            data.forEach(function(data){
-        %>
-          <article class="card-custom">
-            <a href="#">
-              <figure class="card-thumb">
-                <img src="<%= data.imagePath %>" alt="Course Image">
-              </figure>
-              <div class="card-content">
-                <h3 class="card-title"><%= data.title %> </h3>
-				<h4 class="card-title"> (<%= data.code %>)</h4>
-                <p class="card-excerpt"><%= data.description %> </p>
+<%- include('./partials/navbar', {isLoggedIn: false}); -%>
+
+<section class="contents">
+  <!--   Main Content   -->
+  <div class="contents-main">
+    <!-- Carousel -->
+    <div class="hero-carousel">
+      <h1>Top Articles</h1>
+      <div class="carousel-item carousel-item-visible">
+        <div class="hero-image-container">
+          <img src="/images/Sex_Ed_1.jpg" alt="">
+        </div> 
+        <a href="/articles/article1" class="link">
+          <div class="hero-article-info">
+            <h1 class="hero-article-header">Importance of Inclusive education</h1>
+            <div class="hero-article-data">
+              <span class="hero-article-date">Nov 11, 2021</span>
+              <div class="hero-article-options">
+                <div class="hero-article-writer">
+                  <div class="hero-user-icon">
+                    <img src="https://media.istockphoto.com/photos/headshot-of-44-year-old-mixed-race-man-in-casual-polo-shirt-picture-id1264106963?b=1&k=20&m=1264106963&s=170667a&w=0&h=dLQliHpFkaweGQhiRfkNGkwsAPoKCEy9UWWk-m2iCCk=" alt="">
+                  </div>
+                  <span>Nathnael Mekonnen</span>
+                </div>
+                <i class="fa-solid fa-bookmark"></i>
+                <i class="fa-solid fa-ellipsis"></i>
               </div>
-            </a>	  
-          </article>
-		<%
-          });
-        }
-		else{
-        %>
-         <article class="card-custom">
-            <div class="card-content">
-                <h2 class="card-title"> No Data Found </h2>
             </div>
-        </article>
-        <% } %>
+          </div>
+        </a>
+      </div>
+    
+      <div class="carousel-item">
+        <div class="hero-image-container">
+            <img src="https://img.freepik.com/free-vector/sexual-education-concept_277904-6946.jpg?size=626&ext=jpg" alt="">
         </div>
+        <a href="/articles/article2" class="link">
+          <div class="hero-article-info">
+            <h1 class="hero-article-header">Why Inclusive Sex ED is important</h1>
+            <div class="hero-article-data">
+              <span class="hero-article-date">Jan 26, 2022</span>
+              <div class="hero-article-options">
+                <div class="hero-article-writer">
+                  <div class="hero-user-icon">
+                    <img src="https://media.istockphoto.com/photos/headshot-of-44-year-old-mixed-race-man-in-casual-polo-shirt-picture-id1264106963?b=1&k=20&m=1264106963&s=170667a&w=0&h=dLQliHpFkaweGQhiRfkNGkwsAPoKCEy9UWWk-m2iCCk=" alt="">
+                  </div>
+                  <span>Mahlet Tizazu</span>
+                </div>
+                <i class="fa-solid fa-bookmark"></i>
+                <i class="fa-solid fa-ellipsis"></i>
+              </div>
+            </div>
+          </div>
+        </a>
+      </div>
+
+      <div class="carousel-item ">
+        <div class="hero-image-container">
+          <img src="./images/Body_image_1.png" alt="">
+        </div>
+        <a href="/articles/article.php" class="link">
+          <div class="hero-article-info">
+            <h1 class="hero-article-header">Positive Body image</h1>
+            <div class="hero-article-data">
+              <span class="hero-article-date">Dec 26, 2021</span>
+              <div class="hero-article-options">
+                <div class="hero-article-writer">
+                  <div class="hero-user-icon">
+                    <img src="https://media.istockphoto.com/photos/headshot-of-44-year-old-mixed-race-man-in-casual-polo-shirt-picture-id1264106963?b=1&k=20&m=1264106963&s=170667a&w=0&h=dLQliHpFkaweGQhiRfkNGkwsAPoKCEy9UWWk-m2iCCk=" alt="">
+                  </div>
+                  <span>Mahlet Assbu</span>
+                </div>
+                <i class="fa-solid fa-bookmark"></i>
+                <i class="fa-solid fa-ellipsis"></i>
+              </div>
+            </div>
+          </div>
+        </a>
+      </div>
+
+      <div class="carousel-item">
+        <div class="hero-image-container">
+            <img src="./images/STD.jpg" alt="Sexually transmitted disease image representation">
+        </div>
+        <a href="/articles/article2.php" class="link">
+          <div class="hero-article-info">
+              <h1 class="hero-article-header">What can you do to keep yourself safe from STDs?</h1>
+              <div class="hero-article-data">
+                <span class="hero-article-date">Dec 26, 2021</span>
+                <div class="hero-article-options">
+                  <div class="hero-article-writer">
+                    <div class="hero-user-icon">
+                      <img src="https://media.istockphoto.com/photos/headshot-of-44-year-old-mixed-race-man-in-casual-polo-shirt-picture-id1264106963?b=1&k=20&m=1264106963&s=170667a&w=0&h=dLQliHpFkaweGQhiRfkNGkwsAPoKCEy9UWWk-m2iCCk=" alt="">
+                    </div>
+                    <span>Nahom Temam</span>
+                  </div>
+                  <i class="fa-solid fa-bookmark"></i>
+                  <i class="fa-solid fa-ellipsis"></i>
+                </div>
+              </div>
+          </div>
+        </a>
+      </div>
+      
+      <div class="carousel-actions">
+          <button class="carousel-preview-btn" id="previous" aria-label="previous">
+              <i class="fa-solid fa-angle-left"></i>
+          </button>
+          <button class="carousel-preview-btn" id="next" aria-label="next">
+              <i class="fa-solid fa-angle-right"></i>
+          </button>
       </div>
     </div>
-			
+
+    <div class="blog-cards" id="card-lists">
+      <% if(articles.length > 0){ %>
+        <% articles.forEach(function(article) { %>
+          <div class="blog-card">
+              <div class="blog-card-container">
+                  <div class="image-container">
+                      <img class="card-image" src="<%= article.blogImage %>" alt="Article Image">
+                  </div>
+                  <div class="blog-details">
+                      <a href="<%= article.href %>" class="link">
+                          <h1 class="blog-header"><%= article.title %></h1>
+                          <p class="blog-description"><%= article.description %></p>
+                      </a>
+                      <div class="blog-info">
+                          <span class="blog-date"><%= article.date %></span>
+                          <div class="blog-options">
+                              <div class="blog-writer">
+                                  <div class="user-icon">
+                                      <img src="https://media.istockphoto.com/photos/headshot-of-44-year-old-mixed-race-man-in-casual-polo-shirt-picture-id1264106963?b=1&k=20&m=1264106963&s=170667a&w=0&h=dLQliHpFkaweGQhiRfkNGkwsAPoKCEy9UWWk-m2iCCk=" alt="">
+                                  </div>
+                                  <span><%= article.writer %></span>
+                              </div>
+                              <i class="fa-solid fa-bookmark"></i>
+                              <i class="fa-solid fa-ellipsis"></i>
+                          </div>
+                      </div>
+                  </div>   
+              </div>
+          </div>
+        <% }); %>
+      <% } else{ %>  
+        <p>No articles to display</p>
+      <% } %>
+    </div> 
+  </div> 
+
+  <!--  Sidebar  -->
+  <div class="contents-sidebar">
+    <div class="sidebar-container">
+      <div class="recommended-topics">
+        <h1 class="recommendations-header">Recommended Topics</h1>
+        <div class="recommendations-container">
+          <button class="recommendation">Hardship</button>
+          <button class="recommendation">Hygine</button>
+          <button class="recommendation">Safety</button>
+          <button class="recommendation">Mental health</button>
+          <button class="recommendation">Sexual assault</button>
+          <button class="recommendation">Healthy relationship</button>
+          <button class="recommendation">Positive self image</button>
+          <button class="recommendation">Self confidence</button>
+          <button class="recommendation">Adolescence</button>
+        </div>
+      </div>
+      <div class="to-follow">
+        <h1 class="to-follow-header">People to follow</h1>
+        <div class="peoples-container">
+          <div class="people-wrapper">
+            <div class="user-icon">
+              <img src="https://www.biography.com/.image/ar_1:1%2Cc_fill%2Ccs_srgb%2Cfl_progressive%2Cq_auto:good%2Cw_1200/MTgxMTU0MTYyMjA4MTU0NzEy/therapist-westheimer-addressed-sexual-performance-issues-in-this-advice-series-photo-by-donna-svennevikwalt-disney-television-via-getty-images.jpg" alt="">
+            </div>
+            <div class="people-info">
+              <h1 class="info-name">Dr.Ruth Westhemier</h1>
+              <p class="info-description">A German-American sex therapist, talk show host, author, professor, Holocaust survivor, and former Haganah sniper.</p> 
+            </div>
+            <button class="follow-button" onclick="follow(0)">follow</button>
+          </div>
+          <div class="people-wrapper">
+            <div class="user-icon">
+              <img src="https://m.media-amazon.com/images/M/MV5BNDQ3NGZlMDYtOTA1Mi00ZWJhLTliZTctMjQ0MWNkZGQ0OTEzXkEyXkFqcGdeQXVyNjUxMjc1OTM@._V1_.jpg" alt="">
+            </div>
+            <div class="people-info">
+              <h1 class="info-name">Dr.Justin Lehmiller</h1> 
+              <p class="info-description">An American social psychologist and author. He is a research fellow at the Kinsey Institute at Indiana University.</p>
+            </div>
+            <button class="follow-button" onclick="follow(1)">follow</button>
+          </div>
+          <div class="people-wrapper">
+            <div class="user-icon">
+              <img src="https://i.guim.co.uk/img/media/2cbb7b18e8238dd463907a82cc7be7160360a1c9/1066_55_3689_2214/master/3689.jpg?width=1200&height=1200&quality=85&auto=format&fit=crop&s=142a0209a663880757df8b428e76680e" alt="">
+            </div>
+            <div class="people-info">
+              <h1 class="info-name">Jordan Peterson</h1>
+              <p class="info-description">A Canadian clinical psychologist, YouTube personality, author, and a professor emeritus at the University of Toronto</p> 
+            </div>
+            <button class="follow-button" onclick="follow(2)">follow</button>
+          </div>
+        </div>
+      </div>
+      <div class="saved-list"></div>
+    </div>
+  </div>
+</section>
+
 <%- include('./partials/footer'); -%>
+

@@ -1,5 +1,42 @@
 <%- include('../partials/header',{title:'Login'}); -%>
    
+<section class="authentication">
+	<div class='sign-in'>
+		<h2 class="title">I already have an Account</h2>
+		<span>Log in with your email and password</span>
+
+		<form action="" method="POST">
+			<small class="error" id="signin-error"></small>
+			<div class="group">
+				<input placeholder="Email" class="form-input" id="login-email"  type="email" name="email" required label="email">
+			</div>
+			<div class="group">
+				<input placeholder="Password" class="form-input" id="login-password" type="password" name="password" required label="email">
+			</div>
+			<div class='buttons'>
+				<button type="submit" name="login" class="custom-button" id="signin-button" >Sign In</button>
+			</div>
+			<br/>
+			<% 
+				if(typeof error !== 'undefined' && error != "")
+				{ 
+			%>
+				<div class="err-msg">
+					<%= error		%>
+				</div>
+			<% 
+				} 
+			%>
+			<div class="form-footer">
+				<label class="float-left" style = "font-weight: normal">
+					<input type="checkbox" name="checkbox"> Remember Me
+				</label>
+				<a href="/auth/forgotpassword">Forgot Password</a>
+			</div>
+		</form>
+	</div>
+</section>
+
 <div class="container p-4">
     <div class="row">
         <div class="col-md-5 mx-auto">

@@ -4,7 +4,7 @@
   "description": "This nodejs app is built to demonstrate the various concepts of nodejs backend framework.",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon app.js"
   },
   "keywords": [
     "nodejs",
@@ -38,5 +38,8 @@
     "nodemailer": "^6.7.5",
     "path": "^0.12.7",
     "rand-token": "^1.0.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.18"
   }
 }

@@ -8,6 +8,74 @@ const sendMail = require('../lib/sendEmail');
 
 const dbConn = require("../config/db_Connection")
 
+const articlesArray = [
+    {
+        count: 4,
+        id: "art1",
+        writer: "Nahom Temam",
+        href: "#",
+        title: "How to stay confident",
+        date: "Jan 15, 2022",
+        description: "How to build self confidence and stand up for ourselves ",
+        blogImage: "/images/Self_confidence.jpg",
+        tags: [],
+        content: {
+        }
+    },
+    {
+        count: 9,
+        id: "art2",
+        writer: "Nathnael Shimelis",
+        href: "#",
+        title: "Culture and it's challenges",
+        date: "Feb 2, 2022",
+        description: "How culture affects sexual education.",
+        blogImage: "/images/culture.jpg",
+        tags: [],
+        content: {
+        }
+    },
+    {
+        count: 7,
+        id: "art3",
+        writer: "Nathnael Menelik",
+        href: "#",
+        title: "Sexual assault and it's causes",
+        date: "Dec 26, 2021",
+        description: "What are the main causes of sexual assault and what causes them?",
+        blogImage: "/images/Sexual_assault.jpg",
+        tags: [],
+        content: {
+        }
+    },
+    {
+        count: 10,
+        id: "art4",
+        writer: "Mahlet Assbu",
+        href: "#",
+        title: "Adolescence",
+        date: "Dec 26, 2021",
+        description: "The many changes that appear because of adolescence",
+        blogImage: "/images/Adolescence.jpg",
+        tags: [],
+        content: {
+        }
+    },
+    {
+        count: 10,
+        id: "art5",
+        writer: "Mahlet Tizazu",
+        href: "#",
+        title: "How to prevent sexual assault",
+        date: "Dec 26, 2021",
+        description: "The different ways to prevent sexual assault",
+        blogImage: "/images/Sexual_assault_prevent.jpg",
+        tags: [],
+        content: {
+        }
+    }
+]
+
 // Home Page
 exports.homePage = (req, res, next) => {
 	var query1;
@@ -48,7 +116,7 @@ exports.homePage = (req, res, next) => {
 			console.log (error);
 			throw error;
 		}
-	res.render('home', {data : result, title:'Homepage'});
+	res.render('home', {data : result, title:'Homepage', articles: articlesArray});
 	});
 }
 
