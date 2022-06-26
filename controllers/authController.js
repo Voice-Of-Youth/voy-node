@@ -224,7 +224,7 @@ exports.login = (req, res, next) => {
 
 // Password reset link request Page
 exports.forgotPassword = (req, res, next) => {
-    res.render("auth/passReset_Request");
+    res.render("auth/forgotpassword");
 };
 
 /* send reset password link in email */

@@ -35,6 +35,7 @@ font-family: 'Open Sans', sans-serif;
 
 .form-footer {
     display: flex;
+    justify-content: space-between;
 }
 
 body {

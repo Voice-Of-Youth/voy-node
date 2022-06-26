@@ -281,7 +281,10 @@
 
 .blog-cards {
     overflow-y: scroll;
-    height: 70vh;
+    position: sticky;
+    position: -webkit-sticky;
+    top: 4.375rem;
+    height: 75vh;
 }
 
 .blog-description {
@@ -376,6 +379,8 @@
 }
 
 .sidebar-container {
+    position: sticky;
+    top: 4.375rem;
     display: flex;
     flex-direction: column;
     align-items: center;

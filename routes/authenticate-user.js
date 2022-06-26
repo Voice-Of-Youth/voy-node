@@ -19,13 +19,12 @@ const {isLoggedin, isNotLoggedin} = require('../lib/check_authentication');
 const validator = require('../lib/validation_rules');
 
 router.get('/', homePage);
-// router.post('/', isLoggedin, homePage);
 
 router.get("/auth/login", isNotLoggedin, loginPage);
-router.post("/auth/login", isNotLoggedin, validator.validationRules[0], login);
+router.post("/auth/login", isNotLoggedin, validator.validationRules[0], homePage);
 
 router.get("/auth/signup", isNotLoggedin, registerPage);
-router.post("/auth/signup", isNotLoggedin, validator.validationRules[1], register);
+router.post("/auth/signup", isNotLoggedin, validator.validationRules[1], homePage);
 
 router.get('/logout', 
 		(req, res, next) => {
@@ -38,8 +37,8 @@ router.get('/logout',
 	}
 );
 
-router.get("/auth/passReset_Request", isNotLoggedin, forgotPassword);
-router.post("/auth/passReset_Request", isNotLoggedin, sendResetPassLink);
+router.get("/auth/forgotpassword", isNotLoggedin, forgotPassword);
+router.post("/auth/forgotpassword", isNotLoggedin, sendResetPassLink);
 
 router.get("/reset-password", isNotLoggedin, resetPasswordPage);
 router.post("/reset-password", isNotLoggedin, validator.validationRules[3], resetPassword);

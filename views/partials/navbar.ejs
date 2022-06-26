@@ -35,23 +35,29 @@
         </div> -->
 
         <ul class="navbar-menu menu">
-            <li class="search-menu-item">
-                <div class="navbar-link link search-styling">
-                    <div id="search" class="search-bar">
-                        <input type="text" class="search-text" placeholder="Search...">
-                        <button class="search-submit">
-                            <i class="fa-solid fa-magnifying-glass"></i>
+
+            <% if(page == "homepage") {%>
+                <li class="search-menu-item">
+                    <div class='searchContainer'>
+                        <button class='iconButton' name="submit-search">
+                          <i class="fa-solid fa-magnifying-glass"></i>
                         </button>
-                        <div class="search-dropdown" id="hits-container"></div>
+                        <input name="search" class='searchInput' placeholder='articles keyword' />
                     </div>
-                    <span id="search-placeholder">Search</span>
-                </div>
-            </li>
+                </li>
+            <% } %>
 
             <% if(!isLoggedIn) { %>
-                    <li class="navbar-menu-item">
-                        <a href='/signin' class='btn-link link'>Sign In</a>
-                    </li>
+                    <% if(page == 'login') { %> 
+                        <li class="navbar-menu-item">
+                            <a href='/auth/signup' class='btn-link link'>Sign Up</a>
+                        </li>
+                    <% } else { %>
+                        <li class="navbar-menu-item">
+                            <a href='/auth/login' class='btn-link link'>Sign In</a>
+                        </li>
+                    <% } %>  
+
             <% } else { %> 
                 <li class="navbar-menu-item">
                     <a href='/logout' class='btn-link link'>Logout</a>

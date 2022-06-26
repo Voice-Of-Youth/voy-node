@@ -1,0 +1,167 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Encode+Sans+Expanded&family=Open+Sans&display=swap');
+
+/* 
+font-family: 'Bebas Neue', cursive;
+font-family: 'Encode Sans Expanded', sans-serif;
+font-family: 'Open Sans', sans-serif; 
+*/
+
+/* Variables */
+
+:root {
+    --black: #010606;
+    --white: #f6f6f6;
+    --lightgreen: #00ff95;
+    --ronchi: #ebb650;
+    --Aqua: #7ddeb6;
+}
+
+:root {
+    --small: 0.75rem;
+    --medium: 1rem;
+    --large: 1.333rem;
+    --header-main: 2.369rem;
+    --header-sub: 1.777rem;
+}
+
+/* Pseudo Class styles for all elements */
+
+*, *::before,*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Open Sans', sans-serif; 
+}
+
+/* Styles related to Authentication page */
+
+.authentication {
+    width: 75%;
+    display: flex;
+    justify-content: center;
+    margin: 30px auto;
+    flex-wrap: wrap;
+    gap: 8rem;
+}
+
+.error {
+    color: red;
+}
+
+.custom-button {
+    min-width: 165px;
+    width: auto;
+    height: 50px;
+    letter-spacing: 0.5px;
+    line-height: 50px;
+    padding: 0 35px 0 35px;
+    background-color: var(--black);
+    font-size: .75rem;
+    color: var(--white);
+    text-transform: uppercase;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+}
+
+.inverted {
+    background-color: var(--white);
+    color: var(--black);
+    border: 1px solid var(--black);
+}
+
+.inverted:hover {
+    background-color: var(--black);
+    color: var(--white);
+    border: none;
+}
+
+.google-sign-in {
+    background-color: #4285f4;
+    color: var(--white);
+    letter-spacing: normal;
+}
+
+.google-sign-in:hover {
+    background-color: #357ae8;
+    border: none;
+}
+
+.custom-button:hover {
+    background-color: var(--white);
+    color: var(--black);
+    border: 1px solid var(--black);
+}
+
+/* Sign In */
+
+.sign-in {
+    width: 380px;
+    display: flex;
+    flex-direction: column;
+}
+
+.sign-in .buttons {
+    display: flex;
+    justify-content: space-between;
+}
+  
+
+/* Input Field Styles */
+
+.group {
+    position: relative;
+    margin: 45px 0;
+}
+.group .form-input {
+    background: none;
+    background-color: transparent;
+    color: grey;
+    font-size: 1rem;
+    padding: 10px 10px 10px 5px;
+    display: block;
+    width: 100%;
+    border: none;
+    border-radius: 0;
+    border-bottom: 1px solid grey;
+    margin: 25px 0;
+}
+.group .form-input:focus {
+    outline: none;
+}
+
+
+
+.group .form-input::placeholder {
+    color: grey;
+    font-size: var(--medium);
+    font-weight: normal;
+    position: absolute;
+    pointer-events: none;
+    left: 5px;
+    top: 10px;
+    transition: 300ms ease all;
+}
+
+/* Sign Up */
+
+.sign-up {
+    display: flex;
+    flex-direction: column;
+    width: 380px;
+}
+
+.title {
+    margin: 10px 0;
+}
+
+.form-textarea {
+    width: 100%;
+    min-height: 8rem;
+    padding: 1rem;
+}
