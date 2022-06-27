@@ -16,31 +16,27 @@ const {
 
 
 const {isLoggedin, isNotLoggedin} = require('../lib/check_authentication');
-const validator = require('../lib/validation_rules');
+const {validationRules} = require('../lib/validation_rules');
 
 router.get('/', homePage);
 
 router.get("/auth/login", isNotLoggedin, loginPage);
-router.post("/auth/login", isNotLoggedin, validator.validationRules[0], homePage);
+router.post("/auth/login", isNotLoggedin, validationRules[0], login);
 
 router.get("/auth/signup", isNotLoggedin, registerPage);
-router.post("/auth/signup", isNotLoggedin, validator.validationRules[1], homePage);
+router.post("/auth/signup", isNotLoggedin, validationRules[1], register);
 
-router.get('/logout', 
-		(req, res, next) => {
-				req.session.destroy(
-						(err) => {
-							next(err);
-							}
-					);
-		res.redirect('/auth/login');
-	}
-);
+router.get('/logout', (req, res, next) => {
+	req.session.destroy((err) => {
+		next(err);
+	});
+	res.redirect('/auth/login');
+});
 
 router.get("/auth/forgotpassword", isNotLoggedin, forgotPassword);
 router.post("/auth/forgotpassword", isNotLoggedin, sendResetPassLink);
 
 router.get("/reset-password", isNotLoggedin, resetPasswordPage);
-router.post("/reset-password", isNotLoggedin, validator.validationRules[3], resetPassword);
+router.post("/reset-password", isNotLoggedin, validationRules[3], resetPassword);
 
 module.exports = router;

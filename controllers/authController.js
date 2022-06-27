@@ -79,29 +79,14 @@ const articlesArray = [
 // Home Page
 exports.homePage = (req, res, next) => {
 	var query1;
-	if (req.method == 'GET')
-	{
-		if (req.session.level == 1)
-			query1 = 'SELECT * FROM `courses`';
-		else 
-			query1 = `SELECT * FROM courses as CO LEFT JOIN users as US ` + 
-						`ON CO.user_id = US.id WHERE US.id = "${req.session.userID}"`;
-	}
-
-	else if (req.method == 'POST')
-	{
+	if (req.method == 'GET') {
+		query1 = `SELECT * FROM blog`;
+	} else if (req.method == 'POST') {
 		const { body } = req;
 		//fulltext search 
-		if (req.session.level == 1){
-			query1 = `SELECT * FROM courses WHERE MATCH (code, title, description)` +
-							` AGAINST ("${body.search_Key}" IN NATURAL LANGUAGE MODE)`;
-		}
-		else{
-			query1 = `SELECT * FROM courses as CO LEFT JOIN users as US ON CO.user_id = US.id` + 
-							 ` WHERE US.id = "${req.session.userID}"` +
-							 ` AND MATCH (code, title, description)` +
-							` AGAINST ("${body.search_Key}" IN NATURAL LANGUAGE MODE)`;			
-		}
+		
+		query1 = `SELECT * FROM blog WHERE MATCH (blogName, Content)` +
+					` AGAINST ("${body.search_Key}" IN NATURAL LANGUAGE MODE)`;
 		
 		//Alternative: search multiple columns with "concat & like" operators 
 		/*
@@ -113,10 +98,10 @@ exports.homePage = (req, res, next) => {
 		
 		if(error)
 		{
-			console.log (error);
+			console.error (error);
 			throw error;
 		}
-	res.render('home', {data : result, title:'Homepage', articles: articlesArray});
+	res.render('home', {title:'Homepage', articles: articlesArray, dbQueryResult: result});
 	});
 }
 
@@ -134,24 +119,26 @@ exports.register = async (req, res, next) => {
         return res.render('auth/register', {error: errors.array()[0].msg});
     }
 
-
     try {
-		var query2 = "SELECT * FROM `users` WHERE `email`=?";
+		var query2 = "SELECT * FROM `user` WHERE `email`=?";
         dbConn.query(query2, [body.email], async(error, row)=>{
 			if (error)
 			{
-				console.log(error)
+				console.error(error)
 				throw error
 			}
 			
-			if (row.length >= 1) {
+			if (row.length == 1) {
 				return res.render('auth/register', {error: 'This email already in use.'});
 			}
 
 			//const hashPass = await bcrypt.hash(body._password, 12);
 			const hashPass = await encrypt.encryptPassword(body.password);
-			var query3 = "INSERT INTO `users`(`fname`,`lname`,`gender`,`email`,`password`) VALUES(?,?,?,?,?)";
-			dbConn.query(query3, [body.fname, body.lname, body.gender, body.email, hashPass], 
+
+			var query3 = "INSERT INTO `user`(`FirstName`,`LastName`,`UserName`,`Email`,`Password`) VALUES(?,?,?,?,?)";
+			const nameResult = body.fullname;
+			const namedArray = nameResult.split(" ");
+			dbConn.query(query3, [namedArray[0], namedArray[1], body.username, body.email, hashPass], 
 						 (error, rows)=>{
 							if(error)
 							{
@@ -190,10 +177,12 @@ exports.login = (req, res, next) => {
     }
 
     try {
-		var query4 = 'SELECT * FROM `users` WHERE `email`=?'
+		var query4 = 'SELECT * FROM `user` WHERE `email`=?'
         dbConn.query(query4, [body.email], async function(error, row){
+
 			if(error)
-				throw error; 
+				// throw error; 
+				console.error("error executing query", error)
 			else
 			{
 				if (row.length != 1) {
@@ -201,14 +190,14 @@ exports.login = (req, res, next) => {
 						error: 'Invalid email address or password.'
 					});
 				}
-			
-				//const checkPass = await bcrypt.compare(body.password, row[0].password);
-				const checkPass = await encrypt.matchPassword(body.password, row[0].password);
-	
+				
+				// const checkPass = await bcrypt.compare(body.password, row[0].password);
+
+				const checkPass = await encrypt.matchPassword(body.password, row[0].Password);
+
 				if (checkPass === true) {
 					req.session.userID = row[0].id;
 					req.session.email = row[0].email;
-					req.session.level = row[0].level;
 					return res.redirect('/');
 				}
 
@@ -245,7 +234,7 @@ exports.sendResetPassLink = (req, res, next) => {
 				if (sent != '0') 
 				{
 					var data = {token: token}
-					var query3 = 'UPDATE users SET ? WHERE email ="' + email + '"';
+					var query3 = 'UPDATE user SET ? WHERE email ="' + email + '"';
 					dbConn.query(query3, data, function(err, result) {
 						if(err) 
 							throw err 
@@ -284,14 +273,14 @@ exports.resetPassword = (req, res, next) => {
 		}
 	
 	var token = body.token;
-    var query5 = 'SELECT * FROM users WHERE token ="' + token + '"';
+    var query5 = 'SELECT * FROM user WHERE token ="' + token + '"';
     dbConn.query(query5, async(err, result) =>{
         if (err) 
 			throw err;
 
         if (result.length > 0) {                  
             const hashPass = await encrypt.encryptPassword(body.password);
-			var query5 = 'UPDATE users SET password = ? WHERE email ="' + result[0].email + '"';
+			var query5 = 'UPDATE user SET password = ? WHERE email ="' + result[0].email + '"';
             dbConn.query(query5, hashPass, function(err, result) {
                 if(err) 
 					throw err

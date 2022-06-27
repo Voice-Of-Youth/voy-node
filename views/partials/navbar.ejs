@@ -38,12 +38,14 @@
 
             <% if(page == "homepage") {%>
                 <li class="search-menu-item">
-                    <div class='searchContainer'>
-                        <button class='iconButton' name="submit-search">
-                          <i class="fa-solid fa-magnifying-glass"></i>
-                        </button>
-                        <input name="search" class='searchInput' placeholder='articles keyword' />
-                    </div>
+                    <form method="POST" action="">
+                        <div class='searchContainer'>
+                            <button class='iconButton' name="submit-search">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                            </button>
+                            <input name="search" class='searchInput' placeholder='articles keyword' />
+                        </div>
+                    </form>
                 </li>
             <% } %>
 
