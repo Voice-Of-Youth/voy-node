@@ -30,7 +30,7 @@ router.get('/logout', (req, res, next) => {
 	req.session.destroy((err) => {
 		next(err);
 	});
-	res.redirect('/auth/login');
+	res.redirect('/');
 });
 
 router.get("/auth/forgotpassword", isNotLoggedin, forgotPassword);

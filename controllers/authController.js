@@ -101,7 +101,8 @@ exports.homePage = (req, res, next) => {
 			console.error (error);
 			throw error;
 		}
-	res.render('home', {title:'Homepage', articles: articlesArray, dbQueryResult: result});
+
+	res.render('home', {title:'Homepage', articles: articlesArray, dbQueryResult: result, session: req.session});
 	});
 }
 
@@ -203,8 +204,9 @@ exports.login = (req, res, next) => {
 				const checkPass = await encrypt.matchPassword(body.password, row[0].Password);
 
 				if (checkPass === true) {
-					req.session.userID = row[0].userID;
+					req.session.userID = row[0].UserID;
 					req.session.email = row[0].Email;
+
 					return res.redirect('/');
 				}
 

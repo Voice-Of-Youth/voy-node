@@ -1,6 +1,6 @@
 
 <%- include('./partials/header', {page: "homepage"}); -%>
-<%- include('./partials/navbar', {isLoggedIn: false, page: "homepage"}); -%>
+<%- include('./partials/navbar', {isLoggedIn: session.userID ? true : false, page: "homepage"}); -%>
 
 <section class="contents">
   <!--   Main Content   -->
