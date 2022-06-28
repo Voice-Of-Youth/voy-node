@@ -7,14 +7,13 @@ const encrypt = require('../lib/hashing');
 const { sendingMail } = require('../lib/sendEmail');
 
 const dbConn = require("../config/db_Connection");
-const { clouddebugger } = require('googleapis/build/src/apis/clouddebugger');
 
 const articlesArray = [
     {
         count: 4,
         id: "art1",
         writer: "Nahom Temam",
-        href: "#",
+        href: "article/1",
         title: "How to stay confident",
         date: "Jan 15, 2022",
         description: "How to build self confidence and stand up for ourselves ",
@@ -204,8 +203,8 @@ exports.login = (req, res, next) => {
 				const checkPass = await encrypt.matchPassword(body.password, row[0].Password);
 
 				if (checkPass === true) {
-					req.session.userID = row[0].id;
-					req.session.email = row[0].email;
+					req.session.userID = row[0].userID;
+					req.session.email = row[0].Email;
 					return res.redirect('/');
 				}
 
@@ -293,12 +292,17 @@ exports.resetPassword = (req, res, next) => {
 	var token = body.token;
     var query5 = `SELECT * FROM user WHERE token ="${token}"`;
     dbConn.query(query5, async(err, result) =>{
+
+		console.log("the result of the search query", result)
         if (err) 
 			throw err;
 
         if (result.length > 0) {                  
             const hashPass = await encrypt.encryptPassword(body.password);
-			var query5 = `UPDATE user SET password = ? WHERE email ="${result[0].email}"`;
+			console.log(body);
+
+
+			var query5 = `UPDATE user SET password = ? WHERE email ="${result[0].Email}"`;
             dbConn.query(query5, hashPass, function(err, result) {
                 if(err) 
 					throw err

@@ -1,7 +1,6 @@
 
 const router = require("express").Router();
 const express = require("express");
-const app = express();
 
 const {
 		recordDisplayPage,
@@ -31,6 +30,7 @@ router.get('/pages/add', isLoggedin, addRecordPage);
 router.post('/pages/add', isLoggedin, validator.validationRules[2], addRecord);
 
 router.get('/pages/importCSV', isLoggedin, importRecordPage);
+
 router.get('/pages/download', isLoggedin, downloadFile);
 router.post('/pages/importCSV', isLoggedin, importRecord);
 
