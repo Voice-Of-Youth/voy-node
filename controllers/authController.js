@@ -4,9 +4,10 @@ var nodemailer = require('nodemailer');
 
 const { validationResult } = require("express-validator");
 const encrypt = require('../lib/hashing');
-const sendMail = require('../lib/sendEmail');
+const { sendingMail } = require('../lib/sendEmail');
 
-const dbConn = require("../config/db_Connection")
+const dbConn = require("../config/db_Connection");
+const { clouddebugger } = require('googleapis/build/src/apis/clouddebugger');
 
 const articlesArray = [
     {
@@ -140,8 +141,7 @@ exports.register = async (req, res, next) => {
 			const namedArray = nameResult.split(" ");
 			dbConn.query(query3, [namedArray[0], namedArray[1], body.username, body.email, hashPass], 
 						 (error, rows)=>{
-							if(error)
-							{
+							if(error) {
 								console.log (error);
 								throw error;
 							}
@@ -150,6 +150,14 @@ exports.register = async (req, res, next) => {
 								return res.render('auth/register', 
 													{error: 'Your registration has failed.'});
 							}
+
+							const content = `<p>you have successfully registered to Voice of youth. have a great time</p>`;
+
+							const subject = "Successful Registration to Voice of Youth"
+							
+							sendingMail(body.email, "", content, subject)
+								.then((res) => res).catch(err => console.log(err));
+
 
 							res.render("auth/register",
 										{msg: 'You have successfully registered. You can Login now!'});
@@ -222,35 +230,45 @@ exports.sendResetPassLink = (req, res, next) => {
 		const { body } = req;
 		const email = body.email;
 		
-		var query2 = 'SELECT * FROM users WHERE email ="' + email + '"';
+		var query2 = `SELECT * FROM user WHERE email ="${email}"`;
 		dbConn.query(query2, function(err, result) {
 			if (err)
 				throw err;
 			
 			if (result.length > 0) {
 				const token = randtoken.generate(20);
-				const sent =  sendMail.sendingMail(email, token);
-				
-				if (sent != '0') 
-				{
-					var data = {token: token}
-					var query3 = 'UPDATE user SET ? WHERE email ="' + email + '"';
-					dbConn.query(query3, data, function(err, result) {
-						if(err) 
-							throw err 
+
+				const content = `
+									<p>You requested for reset password, kindly use this 
+										<a href="http://localhost:5000/reset-password?token=${token}">
+											link
+										</a> to reset your password
+									</p>
+								`;
+
+				const subject = "Email for resetting password"
+
+				sendingMail(email, token, content, subject)
+					.then((respose) => {
+						console.log(respose)
+						var data = {token: token}
+						var query3 = `UPDATE user SET ? WHERE email ="${email}"`;
+						dbConn.query(query3, data, function(err, result) {
+							if(err) 
+								throw err 
+						})
+							
+						res.render('auth/forgotpassword', 
+									{msg: 'The reset password link has been sent to your email address'});	
 					})
-					
-	 			res.render('auth/passReset_Request', 
-							{msg: 'The reset password link has been sent to your email address'});
-	 			} 
-				else {		
-					res.render('auth/passReset_Request', 
+					.catch(err=> {
+						console.log(err)
+						res.render('auth/forgotpassword', 
 								{error: 'Something goes to wrong. Please try again'})
-				}
-			} 
-			else {
+					});
+			} else {
 				console.log('2');			
-				res.render('auth/passReset_Request', 
+				res.render('auth/forgotpassword', 
 						{error: 'The Email is not registered with us'})				
 			}		
 		});
@@ -273,14 +291,14 @@ exports.resetPassword = (req, res, next) => {
 		}
 	
 	var token = body.token;
-    var query5 = 'SELECT * FROM user WHERE token ="' + token + '"';
+    var query5 = `SELECT * FROM user WHERE token ="${token}"`;
     dbConn.query(query5, async(err, result) =>{
         if (err) 
 			throw err;
 
         if (result.length > 0) {                  
             const hashPass = await encrypt.encryptPassword(body.password);
-			var query5 = 'UPDATE user SET password = ? WHERE email ="' + result[0].email + '"';
+			var query5 = `UPDATE user SET password = ? WHERE email ="${result[0].email}"`;
             dbConn.query(query5, hashPass, function(err, result) {
                 if(err) 
 					throw err
