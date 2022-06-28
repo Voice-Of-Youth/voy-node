@@ -1,13 +1,13 @@
 
 <%- include('./partials/header', {page: "homepage"}); -%>
-<%- include('./partials/navbar', {isLoggedIn: session.userID ? true : false, page: "homepage"}); -%>
+<%- include('./partials/navbar', {isLoggedIn: session.userID ? true : false, page: "homepage", imagePath: session.imagePath || "images/uploads/default_profile.png"}); -%>
 
 <section class="contents">
   <!--   Main Content   -->
   <div class="contents-main">
     <!-- Carousel -->
     <div class="hero-carousel">
-      <h1>Top Articles</h1>
+      <h1>Top Articles </h1>
       <div class="carousel-item carousel-item-visible">
         <div class="hero-image-container">
           <img src="/images/Sex_Ed_1.jpg" alt="">

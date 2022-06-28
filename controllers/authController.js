@@ -94,6 +94,9 @@ exports.homePage = (req, res, next) => {
 		*		` like "%${body.search_Key}%"`;		
 		*/
 	}
+
+	console.log(req.session)
+
     dbConn.query(query1, async (error, result)=>{
 		
 		if(error)
@@ -206,7 +209,7 @@ exports.login = (req, res, next) => {
 				if (checkPass === true) {
 					req.session.userID = row[0].UserID;
 					req.session.email = row[0].Email;
-
+					req.session.imagePath = row[0].imagePath;
 					return res.redirect('/');
 				}
 

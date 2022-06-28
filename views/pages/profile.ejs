@@ -1,0 +1,61 @@
+<%- include('../partials/header', {page: "profile page"}); -%>
+<%- include('../partials/navbar', {isLoggedIn: session.userID ? true : false, page: 'profile page', imagePath: session.imagePath || "images/uploads/default_profile.png"}) -%> 
+
+<form class ="form" id = "form" action = "" enctype = "multipart/form-data" method = "post">
+    <div class= "upload" style="margin-top: 2rem; margin-bottom: 2rem">
+    <img src="<%= data[0].imagePath || "images/uploads/default_profile.png" %> " width = 125 height = 125 title="">
+    <div class = "round">
+        <input type= "hidden" name= "id" value="<% session.userID %> ">
+        <input type= "hidden" name= "name" value="<% session.name %> ">
+        <input type= "file" name= "image" id= "image" accept=".jpg, .jpeg, .png">
+        <i class = "fa fa-camera" style = "color: #fff"> </i>
+    </div>
+    </div>
+        <div class='card mb-4' >
+          <div class='card-body text-center' style='width: 60%; margin-left: 25rem'>
+            <div class='row'>
+              <div class='col-sm-3'>
+                <p class='mb-0'>Full Name</p>
+              </div>
+              <div class='col-sm-9'>
+                <p class='text-muted mb-0'><%= data[0].FirstName + " " +data[0].LastName  %> </p>
+              </div>
+            </div>
+            <hr>
+            <div class='row'>
+              <div class='col-sm-3'>
+                <p class='mb-0'>Username</p>
+              </div>
+              <div class='col-sm-9'>
+                <p class='text-muted mb-0'><%= data[0].UserName  %></p>
+              </div>
+            </div>
+            <hr>
+            <div class='row'>
+              <div class='col-sm-3'>
+                <p class='mb-0'>Email</p>
+              </div>
+              <div class='col-sm-9'>
+                <p class='text-muted mb-0'><%= data[0].Email  %></p>
+              </div>
+            </div>
+            <hr>
+            <div class='row'>
+              <div class='col-sm-3'>
+                <p class='mb-0'>Writer privilege </p>
+              </div>
+              <div class='col-sm-9'>
+                <p class='text-muted mb-0'><%= data[0].IsWriter == 1 ? "Authorized" : "Not Authorized"   %></p>
+              </div>
+            </div>
+            </div>
+          </div>
+</form>
+
+<script type = "text/javascript">
+    document.getElementById("image").onchange = function(){
+        document.getElementById('form').submit();
+    }
+</script>
+
+<%- include('../partials/footer'); -%>

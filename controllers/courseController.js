@@ -7,6 +7,22 @@ const dbConn = require("../config/db_Connection")
 const validator = require('../lib/validation_rules');
 const { uploadImage, uploadCSVFile } = require('../lib/fileUpload');
 
+exports.ProfilePage = ( req, res) => {
+	const userID = req.session.userID;
+  
+	const searchQuery = "SELECT * FROM user WHERE userid=?";
+  
+	dbConn.query(searchQuery, userID, (error, result)=>{
+	
+	  if(error)
+		throw error;
+  
+	  const msg = req.flash ('success')
+	  req.session.imagePath = result[0].imagePath
+	  res.render('pages/profile', {data:result, msg: msg, title:'Profile Page', session: req.session});
+	});  
+  }
+
 // Record Display Page
 exports.recordDisplayPage = (req, res, next) => {
 	
@@ -243,19 +259,19 @@ exports.imageUploadPage = (req, res, next) => {
 // Image uplaod middleware
 exports.uploadImage = (req, res, next) => {
 
-	var code = req.params.id;  //extract course code attached to the URL
+	// var code = req.params.id;  //extract course code attached to the URL
 	
 	/* Checking if course icon (image) upload success */
-	const upload = uploadImage.single('course_img')
+	const upload = uploadImage.single('image')
 	upload(req, res, function(err) {
 		if (req.file == undefined || err) {
 			req.flash("error", "Error: You must select an image.\r\n Only image files [JPG | JPEG | PNG] are allowed!")
 			req.flash ("title", "Upload Image")
-			return res.redirect("./"+code);
+			return res.redirect("/profile");
 		}		
 
 		//retrive and check if there is image uploaded already
-		var query1 = `SELECT imagePath FROM courses WHERE code = "${code}"`;
+		var query1 = `SELECT imagePath FROM user WHERE UserID = "${req.session.userID}"`;
 		var oldImagePath = "";
 		dbConn.query(query1, function(error, result){
 			if(error){
@@ -264,28 +280,27 @@ exports.uploadImage = (req, res, next) => {
 			oldImagePath = result[0].imagePath;
 		});
 		
-		var imgsrc = '/images/' + req.file.filename
-		//console.log(imgsrc)
-		
-		var query2 = `UPDATE courses SET imagePath = "${imgsrc}" WHERE code = "${code}"`;
+		var imgsrc = 'images/uploads/' + req.file.filename
+
+		var query2 = `UPDATE user SET imagePath = "${imgsrc}" WHERE UserID = "${req.session.userID}"`;
 		dbConn.query(query2, function(error, result){
 			if(error)
 			{
 				//Image is path is not added to database. Remove Uplaoded file.
 				// and send error to the client
-				fs.unlinkSync('public' + imgsrc);
+				fs.unlinkSync('public/' + imgsrc);
 				console.log(error)
 				return res.send(error);
-			}
-			
+			}			
 			//remove existing image
 			else{
-				if (oldImagePath && oldImagePath != "None" && oldImagePath != imgsrc)
-					fs.unlinkSync('public' + oldImagePath);
+				if (oldImagePath && oldImagePath != null && oldImagePath != imgsrc)
+					fs.unlinkSync('public/' + oldImagePath);
 			}
+
 			req.flash("msg", "Image is uploaded. Go back to Home page & check it.")
 			req.flash ("title", "Upload Image")
-			return res.redirect("./"+code);
+			return res.redirect("/profile");
 		});
 	});
 }

@@ -10,7 +10,8 @@ const {
 		editRecord,
 		imageUploadPage,
 		uploadImage,
-		recordDeletePage
+		recordDeletePage,
+		ProfilePage
 		} = require("../controllers/courseController");
 		
 const {
@@ -25,6 +26,9 @@ const validator = require('../lib/validation_rules');
 
 router.get('/pages/display', isLoggedin, recordDisplayPage);
 router.post('/pages/display', isLoggedin, recordDisplayPage);
+
+router.get('/profile', isLoggedin, ProfilePage)
+router.post('/profile', isLoggedin, uploadImage)
 
 router.get('/pages/add', isLoggedin, addRecordPage);
 router.post('/pages/add', isLoggedin, validator.validationRules[2], addRecord);

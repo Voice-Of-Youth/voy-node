@@ -35,6 +35,11 @@
                     </li>
                 <% } %>  
             <% } else { %> 
+                <li class= 'user-icon'> 
+                    <a href= '/profile' > 
+                        <img src= '<%= imagePath || "images/uploads/default_profile.png" %> '>  
+                    </a> 
+                </li>
                 <li class="navbar-menu-item">
                     <a href='/logout' class='btn-link link'>Logout</a>
                 </li>
