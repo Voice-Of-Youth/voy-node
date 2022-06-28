@@ -33,6 +33,10 @@ router.get('/logout', (req, res, next) => {
 	res.redirect('/');
 });
 
+router.get('/article/:id', function(req , res){
+	res.render('articles/article' + req.params.id);
+});
+
 router.get("/auth/forgotpassword", isNotLoggedin, forgotPassword);
 router.post("/auth/forgotpassword", isNotLoggedin, sendResetPassLink);
 

@@ -1,0 +1,84 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Encode+Sans+Expanded&family=Open+Sans&display=swap');
+
+/* 
+font-family: 'Bebas Neue', cursive;
+font-family: 'Encode Sans Expanded', sans-serif;
+font-family: 'Open Sans', sans-serif; 
+*/
+
+/* Variables */
+
+:root {
+    --black: #010606;
+    --white: #f6f6f6;
+    --lightgreen: #00ff95;
+    --ronchi: #ebb650;
+    --Aqua: #7ddeb6;
+}
+
+:root {
+    --small: 0.75rem;
+    --medium: 1rem;
+    --large: 1.333rem;
+    --header-main: 2.369rem;
+    --header-sub: 1.777rem;
+}
+
+/* Pseudo Class styles for all elements */
+
+*, *::before,*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Open Sans', sans-serif; 
+    background-color: #f0f0f1;
+}
+
+.article-header {
+  padding: 30px;
+  font-size: 40px;
+  text-align: center;
+  background: white;
+}
+
+.leftcolumn {   
+  float: left;
+  width: 75%;
+}
+
+.rightcolumn {
+  float: right;
+  width: 25%;
+  padding-left: 20px;
+}
+
+img {
+  width: 400;
+  height: 300;
+}
+
+.card {
+   background-color: white;
+   padding: 2rem;
+   margin-top: 20px;
+}
+
+.articles-container {
+  width: 100%; 
+  padding: 1rem 4rem 2rem 4rem;
+}
+
+@media screen and (max-width: 768px) {
+  .leftcolumn, .rightcolumn {   
+    width: 100%;
+    padding: 0;
+  }
+
+  .articles-container {
+    padding: .75rem 2rem 2rem 2rem;
+  }
+}
