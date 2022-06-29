@@ -88,34 +88,108 @@ exports.homePage = (req, res, next) => {
 	var query1;
 	if (req.method == 'GET') {
 		query1 = `SELECT * FROM blog`;
-	} else if (req.method == 'POST') {
-		const { body } = req;
-		//fulltext search 
+	} 
+	// else if (req.method == 'POST') {
+	// 	const { body } = req;
+	// 	//fulltext search 
 		
-		query1 = `SELECT * FROM blog WHERE MATCH (blogName, Content)` +
-					` AGAINST ("${body.search_Key}" IN NATURAL LANGUAGE MODE)`;
+	// 	query1 = `SELECT * FROM blog WHERE MATCH (blogName, Content)` +
+	// 				` AGAINST ("${body.search_Key}" IN NATURAL LANGUAGE MODE)`;
 		
 		//Alternative: search multiple columns with "concat & like" operators 
 		/*
 		* `SELECT * FROM courses WHERE concat (code, title, description)` +
 		*		` like "%${body.search_Key}%"`;		
 		*/
-	}
+	// }
 
     dbConn.query(query1, async (error, result)=>{
 		
-		if(error)
-		{
+		if(error){
 			console.error (error);
 			throw error;
 		}
 
-	res.render('home', {title:'Homepage', articles: articlesArray, dbQueryResult: result, session: req.session});
+		res.render('home', {title:'Homepage', articles: articlesArray, dbQueryResult: result, session: req.session});
+	});
+}
+
+// Search result
+
+exports.searchResult = (req, res) => {
+	var query1;
+	const { body } = req;
+
+	if (req.method == 'POST') {
+		
+		if (typeof body.search === 'undefined') {
+			if (!body.search) {
+				query1 = 'SELECT * FROM `blog`';
+				req.flash('success', "Please provide a article keyword!")
+			} else {
+				query1 = `SELECT * FROM blog WHERE `
+					+ `concat (blogName, Content)`
+					+ ` like "%${body.search}%"`;
+
+				if (body.sortBy != "") {
+					var sort = "ORDER BY " + body.sortBy;
+				}
+				query1 = `SELECT b.blogName,b.Content,b.createdAt, u.UserName FROM blog b INNER JOIN user u ON u.UserID = b.UserID WHERE (b.blogName lIKE '%${body.search}%' OR b.Content lIKE '%${body.search}%') ${sort}`;
+
+				if (body.filter_key !== "undefined") {
+					query1 = `SELECT*FROM blog WHERE (blogName lIKE '%${body.search}%' OR Content lIKE '%${body.search}%') AND UserID like "%${ body.filter_key } %"`;
+				}
+			}
+		}
+	}
+
+	// app.get('/', (req, res) => {
+	// 	let sql = "SELECT *FROM blog";
+	// 	db.query(sql, (err, result) => {
+	// 		if (err) throw err;
+	// 		res.render('display', { data: result });
+	// 	});
+	// });
+	
+	let resultperpage = 10;
+	dbConn.query(query1, (error, result) => {
+
+		if (error) throw error;
+		
+		const msg = req.flash('success')
+		const numOfResults = result.length;
+		const numberOfPages = Math.ceil(numOfResults / resultperpage);
+		const page = req.query.page ? Number(req.query.page) : 1;
+		
+		if (page > numberOfPages) {
+			res.redirect('/?page=' + encodeURIComponenet(numberOfPages));
+		} else if (page < 1) {
+			res.redirect('/?page=' + encodeURIComponent('1'));
+		}
+
+		//Determine the SQL Limit starting number
+		const startingLimit = (page - 1) * resultperpage;
+		//Get the relevant number of POSTS for this starting page
+		
+		query1 = `SELECT * FROM blog WHERE `
+			+ `concat (blogName, Content)`
+			+ ` like "%${body.search}%" LIMIT ${startingLimit},${resultperpage}`;
+
+		dbConn.query(query1, (error, result) => {
+			if (error) throw error;
+			let iterator = (page - 5) < 1 ? 1 : page - 5;
+			let endinglink = (iterator + 9) <= numberOfPages ? (iterator + 9) : page + (numberOfPages - page);
+			if (endinglink < (page + 4)) {
+				iterator -= (page + 4) - numberOfPages;
+			}
+			res.render('pages/display', { data: result, page, iterator, endinglink, numberOfPages, msg: msg, title: 'Display Search Records', session: req.session});
+		});
+
 	});
 }
 
 // Register Page
-exports.registerPage = (req, res, next) => {
+exports.registerPage = (req, res) => {
     res.render("auth/register");
 };
 

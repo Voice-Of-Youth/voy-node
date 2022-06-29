@@ -11,7 +11,8 @@ const {
 		forgotPassword,
 		sendResetPassLink,
 		resetPasswordPage,
-		resetPassword
+		resetPassword,
+		searchResult
 		} = require("../controllers/authController");
 
 
@@ -19,6 +20,7 @@ const {isLoggedin, isNotLoggedin} = require('../lib/check_authentication');
 const {validationRules} = require('../lib/validation_rules');
 
 router.get('/', homePage);
+router.post('/', searchResult);
 
 router.get("/auth/login", isNotLoggedin, loginPage);
 router.post("/auth/login", isNotLoggedin, validationRules[0], login);
