@@ -5,6 +5,9 @@
 * => require the express module and then initialization it.
 */
 const express = require('express');  
+const cookieParser = require('cookie-parser')
+const cookieSession = require('cookie-session')
+
 const app = express();  
 
 /*
@@ -57,6 +60,9 @@ app.set('port', process.env.PORT || 5000);
 */
 app.use(require('./routes/authenticate-user'));
 app.use(require('./routes/courses'));
+
+app.use(cookieParser());
+// app.use(cookieSession({ secret: 'secret', cookie: { maxAge: 60 * 60 * 1000 }}));
 
 app.use((err, req, res, next) => {
     //console.log(err);

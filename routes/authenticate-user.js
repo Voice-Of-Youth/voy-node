@@ -30,6 +30,8 @@ router.get('/logout', (req, res, next) => {
 	req.session.destroy((err) => {
 		next(err);
 	});
+
+	res.clearCookie()
 	res.redirect('/');
 });
 

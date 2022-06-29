@@ -78,6 +78,13 @@ const articlesArray = [
 
 // Home Page
 exports.homePage = (req, res, next) => {
+
+	// console.dir(req.headers.cookie)
+
+	// req.session.userID = req.headers.cookie.userID;
+	// req.session.email = req.headers.cookie.email;
+	// req.session.imagePath = req.headers.cookie.imagePath;
+
 	var query1;
 	if (req.method == 'GET') {
 		query1 = `SELECT * FROM blog`;
@@ -94,8 +101,6 @@ exports.homePage = (req, res, next) => {
 		*		` like "%${body.search_Key}%"`;		
 		*/
 	}
-
-	console.log(req.session)
 
     dbConn.query(query1, async (error, result)=>{
 		
@@ -210,6 +215,12 @@ exports.login = (req, res, next) => {
 					req.session.userID = row[0].UserID;
 					req.session.email = row[0].Email;
 					req.session.imagePath = row[0].imagePath;
+
+					if(body.Rememberme == "on") {
+						res.cookie(`userID`,row[0].UserID);
+						res.cookie(`email`, row[0].Email);
+						res.cookie(`imagePath`, row[0].imagePath);
+					}
 					return res.redirect('/');
 				}
 
