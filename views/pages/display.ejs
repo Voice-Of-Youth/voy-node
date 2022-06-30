@@ -32,15 +32,34 @@
 				</div>
 			</form>
 		</div>
-		<div>
+		<div style="min-height: 75vh;">
 			<h1>Searched Results </h1>
 
 			
 			<% if(data.length> 0) {
-				data.forEach((data) => { %>
-					<div>
-						<h3><%=data.blogName%></h3>
-						<p><%=data.createdAt%></p>
+				data.forEach((article, idx) => { %>
+					<div class="blog-card">
+						<div class="blog-card-container">
+							<div class="image-container">
+								<img class="card-image" src="<%= imagePath[idx].blogImage %>" alt="Article Image">
+							</div>
+							<div class="blog-details">
+								<a href="<%= imagePath[idx].href %>" class="link">
+									<h1 class="blog-header"><%= article.blogName %></h1>
+									<p class="blog-description"><%= article.description %></p>
+								</a>
+								<div class="blog-info">
+									<span class="blog-date"><%= article.createdAt %></span>
+									<div class="blog-options">
+										<div class="blog-writer">
+											<span><%= article.Category %></span>
+										</div>
+										<i class="fa-solid fa-bookmark"></i>
+										<i class="fa-solid fa-ellipsis"></i>
+									</div>
+								</div>
+							</div>   
+						</div>
 					</div>
 			<% })} else {%>
 				<h2>No Data Found</h2>

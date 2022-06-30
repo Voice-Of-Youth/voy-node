@@ -1,0 +1,32 @@
+<%- include('../components/header', {title: "Article", style: "<h1>something</h1>"}); -%>
+<%- include('../components/nav', {user: user}); -%>
+
+<div class="main containerForm">
+    <form action="/article/add" method="POST">
+        <div class="input-field">
+            <label for="title">Enter title</label>
+            <input class="titleInput" type="text" name="Article_title" id="title">
+            <label for="title">Enter Category</label>
+            <input type="text" name="Category" id="cat">
+        </div>
+        <textarea name="Article_content" id="Article_editor"></textarea>
+        <input class="checkForm" type="checkbox" name="anonymous" id="anonymousWriter">
+        <label for="anonymousWriter">Check this box if you want to send this anonymously</label><br>
+        <input class="btn" type="submit" name="submit_data" value="Send">
+    </form>
+</div>
+</br>
+</br>
+</br>
+</br>
+<%- include('../components/footer'); -%>
+
+<script src="../js/main.js"></script>
+<script src="../js/index.js"></script>
+<script src="../../js/ckeditor/ckeditor.js"></script>
+<script>
+    CKEDITOR.replace('Article_editor');
+</script>
+</body>
+
+</html>

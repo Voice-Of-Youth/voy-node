@@ -117,31 +117,32 @@ exports.homePage = (req, res, next) => {
 // Search result
 
 exports.searchResult = (req, res) => {
-	var query1;
 	const { body } = req;
 
-	if (req.method == 'POST') {
+	var query1 = `SELECT * FROM blog WHERE ` + `concat (blogName, Content)` + ` like "%${body.search}%"`;
+
+	// if (req.method == 'POST') {
 		
-		if (typeof body.search === 'undefined') {
-			if (!body.search) {
-				query1 = 'SELECT * FROM `blog`';
-				req.flash('success', "Please provide a article keyword!")
-			} else {
-				query1 = `SELECT * FROM blog WHERE `
-					+ `concat (blogName, Content)`
-					+ ` like "%${body.search}%"`;
+	// 	if (typeof body.search === 'undefined') {
+	// 		if (!body.search) {
+	// 			query1 = 'SELECT * FROM `blog`';
+	// 			req.flash('success', "Please provide a article keyword!")
+	// 		} else {
+	// 			query1 = `SELECT * FROM blog WHERE `
+	// 				+ `concat (blogName, Content)`
+	// 				+ ` like "%${body.search}%"`;
 
-				if (body.sortBy != "") {
-					var sort = "ORDER BY " + body.sortBy;
-				}
-				query1 = `SELECT b.blogName,b.Content,b.createdAt, u.UserName FROM blog b INNER JOIN user u ON u.UserID = b.UserID WHERE (b.blogName lIKE '%${body.search}%' OR b.Content lIKE '%${body.search}%') ${sort}`;
+	// 			if (body.sortBy != "") {
+	// 				var sort = "ORDER BY " + body.sortBy;
+	// 			}
+	// 			query1 = `SELECT b.blogName,b.Content,b.createdAt, u.UserName FROM blog b INNER JOIN user u ON u.UserID = b.UserID WHERE (b.blogName lIKE '%${body.search}%' OR b.Content lIKE '%${body.search}%') ${sort}`;
 
-				if (body.filter_key !== "undefined") {
-					query1 = `SELECT*FROM blog WHERE (blogName lIKE '%${body.search}%' OR Content lIKE '%${body.search}%') AND UserID like "%${ body.filter_key } %"`;
-				}
-			}
-		}
-	}
+	// 			if (body.filter_key !== "undefined") {
+	// 				query1 = `SELECT*FROM blog WHERE (blogName lIKE '%${body.search}%' OR Content lIKE '%${body.search}%') AND UserID like "%${ body.filter_key } %"`;
+	// 			}
+	// 		}
+	// 	}
+	// }
 
 	// app.get('/', (req, res) => {
 	// 	let sql = "SELECT *FROM blog";
@@ -182,7 +183,9 @@ exports.searchResult = (req, res) => {
 			if (endinglink < (page + 4)) {
 				iterator -= (page + 4) - numberOfPages;
 			}
-			res.render('pages/display', { data: result, page, iterator, endinglink, numberOfPages, msg: msg, title: 'Display Search Records', session: req.session});
+
+			console.log(result);
+			res.render('pages/display', { data: result, page, iterator, imagePath: articlesArray ,endinglink, numberOfPages, msg: msg, title: 'Display Search Records', session: req.session});
 		});
 
 	});

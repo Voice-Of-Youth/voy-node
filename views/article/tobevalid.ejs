@@ -1,0 +1,37 @@
+<%- include('../components/header', {title: "Article", style: "<h1>something</h1>"}); -%>
+<%- include('../components/nav', {user: user}); -%>
+
+<div class="main">
+    <div class="head1">
+        <h1>LIST OF ALL BLOGS TO BE VALIDATED</h1>
+    </div>
+    <% for(var i=0; i< data.length; i++) {
+
+    
+    timeStamp = data[i].createdAt;
+    date = data[i].createdAt;
+    time = data[i].createdAt;
+
+    %>
+
+    <div class="articleList">
+        <ul>
+            <li>
+                <a href="detail?id=<%= data[i].SubID %>"><%= data[i].Article_title %></a>
+                <br><span>Published on: <% date %> At: <%= time %> </span>
+            </li>
+        </ul>
+
+    </div>
+    <% } %>
+</div>
+</br>
+</br>
+</br>
+
+<%- include('../components/footer'); -%>
+
+
+</body>
+
+</html>

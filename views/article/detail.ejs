@@ -1,0 +1,27 @@
+<%- include('../components/header', {title: "Article", style: "<h1>something</h1>"}); -%>
+<%- include('../components/nav', {user: user}); -%>
+
+<h1><%= title %></h1>
+<div class="content">
+    <%= content %>
+</div>
+<div>
+    <br>
+    <h4>By: </h4>
+    <%= author %>
+</div>
+<form action="/article/detail" method="POST">
+    <button type="submit" name="submit" value="<?php echo $authId ?>" class="btn btn-primary">Submit</button>
+</form>
+
+<%- include('../components/footer'); -%>
+
+<script src="../js/main.js"></script>
+<script src="../js/index.js"></script>
+<script src="../js/ckeditor/ckeditor.js"></script>
+<script>
+    CKEDITOR.replace('Article_editor');
+</script>
+</body>
+
+</html>
